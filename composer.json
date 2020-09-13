@@ -1,0 +1,30 @@
+{
+    "name": "jdjd/promised-entities",
+    "type": "library",
+    "description": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jordi Domènech",
+            "email": "jdomenechbborges@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1|^8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.3",
+        "guzzlehttp/promises": "^1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PromisedEntities\\" : "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PromisedEntities\\SrcTest\\": "src-test",
+            "PromisedEntities\\Test\\": "tests"
+        }
+    }
+}
