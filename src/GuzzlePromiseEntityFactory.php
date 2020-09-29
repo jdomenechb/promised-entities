@@ -5,23 +5,22 @@ declare(strict_types=1);
 namespace PromisedEntities;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use PromisedEntities\CodeGenerator\Method\StringMethodGenerator;
 use PromisedEntities\CodeGenerator\Type\StringTypeGenerator;
-use PromisedEntities\CodeGenerator\Type\TypeGenerator;
 
 class GuzzlePromiseEntityFactory implements PromiseEntityFactory
 {
-    /**
-     * @var TypeGenerator
-     */
-    private $typeGenerator;
+    /** @var StringMethodGenerator */
+    private $methodGenerator;
 
     public function __construct()
     {
-        $this->typeGenerator = new StringTypeGenerator();
+        $this->methodGenerator = new StringMethodGenerator(new StringTypeGenerator());
     }
 
     /**
      * @param string $className
+     * @return object
      * @param PromiseInterface $promise
      * @throws \ReflectionException
      */
@@ -44,31 +43,8 @@ class GuzzlePromiseEntityFactory implements PromiseEntityFactory
                 continue;
             }
 
-            $parametersCode = [];
-            $parametersInvocationCode = [];
 
-            foreach ($method->getParameters() as $parameter) {
-                $typeCode = $this->typeGenerator->generate($parameter->getType());
-
-                $parametersCode[] = $typeCode . '$' . $parameter->getName();
-                $parametersInvocationCode[] = '$' . $parameter->getName();
-            }
-
-            $methodCode = "public function {$method->getName()}(";
-            $methodCode .= implode(', ', $parametersCode);
-            $methodCode .= ")";
-
-            if ($method->hasReturnType()) {
-                $methodCode .= ': ' . $this->typeGenerator->generate($method->getReturnType());
-            }
-
-            $methodCode .= "{\n";
-            $methodCode .= 'return $this->promise->wait(true)->' . $method->getName() . '(';
-            $methodCode .= implode(', ', $parametersInvocationCode);
-            $methodCode .= ");\n";
-            $methodCode .= "}";
-
-            $methodsCode[] = $methodCode;
+            $methodsCode[] = $this->methodGenerator->generate($method);
         }
 
         $methodsCode = implode("\n\n", $methodsCode);
