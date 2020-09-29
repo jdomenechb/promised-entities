@@ -19,7 +19,7 @@ class Student
      */
     private $age;
 
-    public function __construct(string $id, string $name, int $age)
+    private function __construct(string $id, string $name, int $age)
     {
         $this->id = $id;
         $this->name = $name;
@@ -48,5 +48,10 @@ class Student
     public function age(): int
     {
         return $this->age;
+    }
+
+    public static function fromData(string $id, string $name, int $age): self
+    {
+        return new self($id, $name, $age);
     }
 }

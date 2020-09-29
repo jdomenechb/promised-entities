@@ -40,11 +40,10 @@ class GuzzlePromiseEntityFactory implements PromiseEntityFactory
         $methodsCode = [];
 
         foreach ($methods as $method) {
-            if ($method->getName() === '__construct') {
+            if ($method->getName() === '__construct' || $method->isStatic()) {
                 continue;
             }
 
-            $static = $method->isStatic()? 'static ': '';
             $parametersCode = [];
             $parametersInvocationCode = [];
 
@@ -55,7 +54,7 @@ class GuzzlePromiseEntityFactory implements PromiseEntityFactory
                 $parametersInvocationCode[] = '$' . $parameter->getName();
             }
 
-            $methodCode = "public {$static}function {$method->getName()}(";
+            $methodCode = "public function {$method->getName()}(";
             $methodCode .= implode(', ', $parametersCode);
             $methodCode .= ")";
 
@@ -66,7 +65,7 @@ class GuzzlePromiseEntityFactory implements PromiseEntityFactory
             $methodCode .= "{\n";
             $methodCode .= 'return $this->promise->wait(true)->' . $method->getName() . '(';
             $methodCode .= implode(', ', $parametersInvocationCode);
-            $methodCode .= ');';
+            $methodCode .= ");\n";
             $methodCode .= "}";
 
             $methodsCode[] = $methodCode;

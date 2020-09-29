@@ -26,7 +26,7 @@ class GuzzlePromiseStudentRepository implements StudentRepository
         $promise = new Promise(function () use (&$promise, $id) {
             switch ($id) {
                 case '1':
-                    $promise->resolve(new Student('1', 'John Smith', 13));
+                    $promise->resolve(Student::fromData('1', 'John Smith', 13));
                     break;
 
                 default:
