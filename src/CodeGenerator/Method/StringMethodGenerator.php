@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PromisedEntities\CodeGenerator\Method;
 
+use PromisedEntities\CodeGenerator\MethodBody\MethodBodyGenerator;
 use PromisedEntities\CodeGenerator\Type\TypeGenerator;
 
 class StringMethodGenerator implements MethodGenerator
@@ -11,9 +12,13 @@ class StringMethodGenerator implements MethodGenerator
     /** @var TypeGenerator */
     private $typeGenerator;
 
-    public function __construct(TypeGenerator $typeGenerator)
+    /** @var MethodBodyGenerator */
+    private $methodBodyGenerator;
+
+    public function __construct(TypeGenerator $typeGenerator, MethodBodyGenerator $methodBodyGenerator)
     {
         $this->typeGenerator = $typeGenerator;
+        $this->methodBodyGenerator = $methodBodyGenerator;
     }
 
     public function generate(\ReflectionMethod $method): string
@@ -38,9 +43,8 @@ class StringMethodGenerator implements MethodGenerator
         }
 
         $methodCode .= "\n{\n";
-        $methodCode .= 'return $this->promise->wait(true)->' . $method->getName() . '(';
-        $methodCode .= implode(', ', $parametersInvocationCode);
-        $methodCode .= ");\n";
+        $methodCode .= $this->methodBodyGenerator->generate($method, $parametersInvocationCode);
+        $methodCode .= "\n";
         $methodCode .= "}";
 
         return $methodCode;

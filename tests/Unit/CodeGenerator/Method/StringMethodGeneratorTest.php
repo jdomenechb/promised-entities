@@ -6,6 +6,7 @@ namespace PromisedEntities\Test\Unit\CodeGenerator\Method;
 
 use PromisedEntities\CodeGenerator\Method\StringMethodGenerator;
 use PHPUnit\Framework\TestCase;
+use PromisedEntities\CodeGenerator\MethodBody\MethodBodyGenerator;
 use PromisedEntities\CodeGenerator\Type\TypeGenerator;
 use PromisedEntities\SrcTest\Doubles\Methods;
 use ReflectionClass;
@@ -20,7 +21,10 @@ class StringMethodGeneratorTest extends TestCase
         $typeGenerator = $this->createMock(TypeGenerator::class);
         $typeGenerator->method('generate')->willReturn('type');
 
-        $this->obj = new StringMethodGenerator($typeGenerator);
+        $methodBodyGenerator = $this->createMock(MethodBodyGenerator::class);
+        $methodBodyGenerator->method('generate')->willReturn('{{methodBody}}');
+
+        $this->obj = new StringMethodGenerator($typeGenerator, $methodBodyGenerator);
     }
 
     public function testOkWithoutArgumentsNorReturnType(): void
@@ -28,7 +32,7 @@ class StringMethodGeneratorTest extends TestCase
         $expected = <<<EXPECTED
 public function method()
 {
-return \$this->promise->wait(true)->method();
+{{methodBody}}
 }
 EXPECTED;
 
@@ -45,7 +49,7 @@ EXPECTED;
         $expected = <<<EXPECTED
 public function methodWithArguments(type \$argument1, type \$argument2)
 {
-return \$this->promise->wait(true)->methodWithArguments(\$argument1, \$argument2);
+{{methodBody}}
 }
 EXPECTED;
 
@@ -62,7 +66,7 @@ EXPECTED;
         $expected = <<<EXPECTED
 public function methodWithReturnType(): type
 {
-return \$this->promise->wait(true)->methodWithReturnType();
+{{methodBody}}
 }
 EXPECTED;
 
