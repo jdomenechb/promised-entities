@@ -2,10 +2,19 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of the promised-entities package.
+ *
+ * (c) Jordi Domènech Bonilla
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PromisedEntities\Test\Unit\CodeGenerator\Method;
 
-use PromisedEntities\CodeGenerator\Method\StringMethodGenerator;
 use PHPUnit\Framework\TestCase;
+use PromisedEntities\CodeGenerator\Method\StringMethodGenerator;
 use PromisedEntities\CodeGenerator\MethodBody\MethodBodyGenerator;
 use PromisedEntities\CodeGenerator\Type\TypeGenerator;
 use PromisedEntities\SrcTest\Doubles\Methods;

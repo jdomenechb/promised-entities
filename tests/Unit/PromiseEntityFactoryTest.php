@@ -2,11 +2,20 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of the promised-entities package.
+ *
+ * (c) Jordi Domènech Bonilla
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PromisedEntities\Test\Unit;
 
+use PHPUnit\Framework\TestCase;
 use PromisedEntities\CodeGenerator\Classes\ClassGenerator;
 use PromisedEntities\CodeGenerator\Classes\ClassGeneratorResponse;
-use PHPUnit\Framework\TestCase;
 use PromisedEntities\CodeGenerator\MethodBody\MethodBodyGenerator;
 use PromisedEntities\PromiseEntityFactory;
 use PromisedEntities\SrcTest\Domain\Student;
@@ -20,7 +29,7 @@ class PromiseEntityFactoryTest extends TestCase
     /** @var PromiseEntityFactory */
     private $obj;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $classGenerator = $this->createMock(ClassGenerator::class);
         $classGenerator->method('generate')->willReturn(

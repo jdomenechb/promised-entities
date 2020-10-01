@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of the promised-entities package.
+ *
+ * (c) Jordi Domènech Bonilla
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PromisedEntities;
 
 use PromisedEntities\CodeGenerator\Classes\ClassGenerator;
@@ -13,7 +22,7 @@ use PromisedEntities\CodeGenerator\Type\StringTypeGenerator;
 final class PromiseEntityFactory
 {
     /** @var ClassGenerator */
-    protected $classGenerator;
+    private $classGenerator;
 
     public function __construct(ClassGenerator $classGenerator)
     {

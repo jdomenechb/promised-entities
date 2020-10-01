@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of the promised-entities package.
+ *
+ * (c) Jordi Domènech Bonilla
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace PromisedEntities\SrcTest\Infrastructure;
 
 use GuzzleHttp\Promise\Promise;
@@ -24,7 +33,7 @@ class GuzzlePromiseStudentRepository implements StudentRepository
 
     public function byId(string $id): ?Student
     {
-        $promise = new Promise(function () use (&$promise, $id) {
+        $promise = new Promise(function () use (&$promise, $id): void {
             switch ($id) {
                 case '1':
                     $promise->resolve(Student::fromData('1', 'John Smith', 13));
@@ -36,8 +45,6 @@ class GuzzlePromiseStudentRepository implements StudentRepository
         });
 
         /** @var Student $toReturn */
-        $toReturn = $this->promisedEntityFactory->build(Student::class, $promise);
-
-        return $toReturn;
+        return $this->promisedEntityFactory->build(Student::class, $promise);
     }
 }
