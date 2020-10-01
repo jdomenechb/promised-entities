@@ -19,7 +19,7 @@ use PromisedEntities\CodeGenerator\Method\StringMethodGenerator;
 use PromisedEntities\CodeGenerator\MethodBody\MethodBodyGenerator;
 use PromisedEntities\CodeGenerator\Type\StringTypeGenerator;
 
-final class PromiseEntityFactory
+final class PromisedEntityFactory
 {
     /** @var ClassGenerator */
     private $classGenerator;
@@ -32,7 +32,7 @@ final class PromiseEntityFactory
     /**
      * @param string $className
      * @return object
-     * @param mixed $promise
+     * @param object $promise
      * @throws \ReflectionException
      */
     public function build(string $className, $promise)
@@ -41,6 +41,8 @@ final class PromiseEntityFactory
         $reflectionPromise = new \ReflectionClass($promise);
 
         $generatedClass = $this->classGenerator->generate($reflection, $reflectionPromise);
+
+        /** @psalm-var class-string $fullPromisedClassName */
         $fullPromisedClassName = $generatedClass->fullClassName();
 
         eval($generatedClass->classCode());
@@ -48,7 +50,7 @@ final class PromiseEntityFactory
         return new $fullPromisedClassName($promise);
     }
 
-    public static function create(MethodBodyGenerator $methodBodyGenerator): PromiseEntityFactory
+    public static function create(MethodBodyGenerator $methodBodyGenerator): PromisedEntityFactory
     {
         return new self(new StringClassGenerator(
             new StringMethodGenerator(

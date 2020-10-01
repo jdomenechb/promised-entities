@@ -15,20 +15,20 @@ namespace PromisedEntities\SrcTest\Infrastructure;
 
 use GuzzleHttp\Promise\Promise;
 use PromisedEntities\CodeGenerator\MethodBody\GuzzleMethodBodyGenerator;
-use PromisedEntities\PromiseEntityFactory;
+use PromisedEntities\PromisedEntityFactory;
 use PromisedEntities\SrcTest\Domain\Student;
 use PromisedEntities\SrcTest\Domain\StudentRepository;
 
 class GuzzlePromiseStudentRepository implements StudentRepository
 {
     /**
-     * @var PromiseEntityFactory
+     * @var PromisedEntityFactory
      */
     private $promisedEntityFactory;
 
     public function __construct()
     {
-        $this->promisedEntityFactory = PromiseEntityFactory::create(new GuzzleMethodBodyGenerator());
+        $this->promisedEntityFactory = PromisedEntityFactory::create(new GuzzleMethodBodyGenerator());
     }
 
     public function byId(string $id): ?Student

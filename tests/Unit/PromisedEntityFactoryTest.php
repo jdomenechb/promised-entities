@@ -17,16 +17,16 @@ use PHPUnit\Framework\TestCase;
 use PromisedEntities\CodeGenerator\Classes\ClassGenerator;
 use PromisedEntities\CodeGenerator\Classes\ClassGeneratorResponse;
 use PromisedEntities\CodeGenerator\MethodBody\MethodBodyGenerator;
-use PromisedEntities\PromiseEntityFactory;
+use PromisedEntities\PromisedEntityFactory;
 use PromisedEntities\SrcTest\Domain\Student;
 use PromisedEntities\SrcTest\Doubles\Classes\EmptyClass;
 use PromisedEntities\SrcTest\Doubles\Classes\Promise;
 
-class PromiseEntityFactoryTest extends TestCase
+class PromisedEntityFactoryTest extends TestCase
 {
     private const GENERATED_CLASS_NAME = 'PromiseEntityFactoryTestGeneratedClass';
 
-    /** @var PromiseEntityFactory */
+    /** @var PromisedEntityFactory */
     private $obj;
 
     protected function setUp(): void
@@ -39,7 +39,7 @@ class PromiseEntityFactoryTest extends TestCase
             )
         );
 
-        $this->obj = new PromiseEntityFactory($classGenerator);
+        $this->obj = new PromisedEntityFactory($classGenerator);
     }
 
     public function testOk(): void
@@ -52,7 +52,7 @@ class PromiseEntityFactoryTest extends TestCase
     public function testStaticCreation(): void
     {
         $methodBodyGenerator = $this->createMock(MethodBodyGenerator::class);
-        $obj = PromiseEntityFactory::create($methodBodyGenerator);
+        $obj = PromisedEntityFactory::create($methodBodyGenerator);
 
         $instance = $obj->build(EmptyClass::class, $this->createMock(Promise::class));
         $this->assertIsObject($instance);
