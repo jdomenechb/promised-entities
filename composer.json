@@ -27,5 +27,9 @@
             "PromisedEntities\\SrcTest\\": "src-test",
             "PromisedEntities\\Test\\": "tests"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit tests",
+        "cs": "vendor/bin/ecs check --fix"
     }
 }
