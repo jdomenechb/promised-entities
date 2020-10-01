@@ -1,5 +1,8 @@
 # Promised Entities
 
+[![Actions Status](https://github.com/jdomenechb/promised-entities/workflows/Main%20workflow/badge.svg)](https://github.com/jdomenechb/promised-entities/actions)
+[![codecov](https://codecov.io/gh/jdomenechb/promised-entities/branch/master/graph/badge.svg?token=4ZLTS6PQ18)](https://codecov.io/gh/jdomenechb/promised-entities)
+
 Have you ever wondered how you can integrate asynchronous PHP features with code structures like Domain Driven Design? 
 
 This library, among other uses, will allow you to use promises to instantiate objects asynchronously without having to 
