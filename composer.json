@@ -1,11 +1,11 @@
 {
-    "name": "jdjd/promised-entities",
+    "name": "jdomenechb/promised-entities",
     "type": "library",
-    "description": "",
+    "description": "Fetch entities or value objects asynchronously by using promises",
     "license": "MIT",
     "authors": [
         {
-            "name": "Jordi Domènech",
+            "name": "Jordi Domènech Bonilla",
             "email": "jdomenechbborges@gmail.com"
         }
     ],

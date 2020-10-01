@@ -13,16 +13,11 @@ use PromisedEntities\CodeGenerator\Type\StringTypeGenerator;
 final class PromiseEntityFactory
 {
     /** @var ClassGenerator */
-    private $classGenerator;
+    protected $classGenerator;
 
-    public function __construct(MethodBodyGenerator $methodBodyGenerator)
+    public function __construct(ClassGenerator $classGenerator)
     {
-        $this->classGenerator = new StringClassGenerator(
-            new StringMethodGenerator(
-                new StringTypeGenerator(),
-                $methodBodyGenerator
-            )
-        );
+        $this->classGenerator = $classGenerator;
     }
 
     /**
@@ -42,5 +37,15 @@ final class PromiseEntityFactory
         eval($generatedClass->classCode());
 
         return new $fullPromisedClassName($promise);
+    }
+
+    public static function create(MethodBodyGenerator $methodBodyGenerator): PromiseEntityFactory
+    {
+        return new self(new StringClassGenerator(
+            new StringMethodGenerator(
+                new StringTypeGenerator(),
+                $methodBodyGenerator
+            )
+        ));
     }
 }
