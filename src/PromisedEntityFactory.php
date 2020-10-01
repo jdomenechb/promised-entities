@@ -30,7 +30,7 @@ final class PromisedEntityFactory
     }
 
     /**
-     * @param string $className
+     * @psalm-param class-string $className
      * @return object
      * @param object $promise
      * @throws \ReflectionException
@@ -42,7 +42,7 @@ final class PromisedEntityFactory
 
         $generatedClass = $this->classGenerator->generate($reflection, $reflectionPromise);
 
-        /** @psalm-var class-string $fullPromisedClassName */
+        /** @var class-string<PromisedEntity> $fullPromisedClassName */
         $fullPromisedClassName = $generatedClass->fullClassName();
 
         eval($generatedClass->classCode());

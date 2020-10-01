@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PromisedEntities\CodeGenerator\Classes;
 
 use PromisedEntities\CodeGenerator\Method\MethodGenerator;
+use PromisedEntities\PromisedEntity;
 
 class StringClassGenerator implements ClassGenerator
 {
@@ -33,7 +34,16 @@ class StringClassGenerator implements ClassGenerator
         $promisedClassNamespace = $reflection->getNamespaceName();
         $fullPromisedClassName = $promisedClassNamespace . '\\' . $promisedClassName;
 
-        $relation = $reflection->isInterface() ? 'implements' : 'extends';
+        $extends = [];
+        $implements = [
+            '\\' . PromisedEntity::class,
+        ];
+
+        if ($reflection->isInterface()) {
+            $implements[] = "\\{$reflection->getName()}";
+        } else {
+            $extends[] = "\\{$reflection->getName()}";
+        }
 
         $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
         $methodsCode = [];
@@ -51,8 +61,16 @@ class StringClassGenerator implements ClassGenerator
         $classCode = <<<CLASS
 namespace $promisedClassNamespace;
 
-class $promisedClassName $relation \\{$reflection->getName()} 
-{
+class $promisedClassName
+CLASS;
+
+        if ($extends) {
+            $classCode .= ' extends ' . implode(', ', $extends);
+        }
+
+        $classCode .= ' implements ' . implode(', ', $implements);
+
+        $classCode .= "\n{
     /** @var \\{$reflectionPromise->getName()} */
     private \$promise;
 
@@ -62,8 +80,7 @@ class $promisedClassName $relation \\{$reflection->getName()}
     }
     
 $methodsCode
-}
-CLASS;
+}";
 
         return new ClassGeneratorResponse($fullPromisedClassName, $classCode);
     }
