@@ -39,6 +39,10 @@ class GuzzlePromiseStudentRepository implements StudentRepository
                     $promise->resolve(Student::fromData('1', 'John Smith', 13));
                     break;
 
+                case '2':
+                    $promise->resolve(Student::fromData('2', 'Jane Doe', 14));
+                    break;
+
                 default:
                     $promise->resolve(null);
             }

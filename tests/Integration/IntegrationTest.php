@@ -27,4 +27,19 @@ class IntegrationTest extends TestCase
         $this->assertSame('John Smith', $student->name());
         $this->assertSame(13, $student->age());
     }
+
+    public function testBuildingSameClassTwice(): void
+    {
+        $repository = new GuzzlePromiseStudentRepository();
+        $student1 = $repository->byId('1');
+        $student2 = $repository->byId('2');
+
+        $this->assertSame('1', $student1->id());
+        $this->assertSame('John Smith', $student1->name());
+        $this->assertSame(13, $student1->age());
+
+        $this->assertSame('2', $student2->id());
+        $this->assertSame('Jane Doe', $student2->name());
+        $this->assertSame(14, $student2->age());
+    }
 }

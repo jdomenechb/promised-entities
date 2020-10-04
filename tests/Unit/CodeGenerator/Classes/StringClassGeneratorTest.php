@@ -44,6 +44,7 @@ class StringClassGeneratorTest extends TestCase
         $expectedClassCode = <<<EXPECTED
 namespace PromisedEntities\SrcTest\Doubles\Classes;
 
+if (!class_exists("\PromisedEntities\SrcTest\Doubles\Classes\PromisedEmptyClass", false)) {
 class PromisedEmptyClass extends \PromisedEntities\SrcTest\Doubles\Classes\EmptyClass implements \PromisedEntities\PromisedEntity
 {
     /** @var \PromisedEntities\SrcTest\Doubles\Classes\Promise */
@@ -55,6 +56,7 @@ class PromisedEmptyClass extends \PromisedEntities\SrcTest\Doubles\Classes\Empty
     }
     
 
+}
 }
 EXPECTED;
 
@@ -72,6 +74,7 @@ EXPECTED;
         $expectedClassCode = <<<EXPECTED
 namespace PromisedEntities\SrcTest\Doubles\Classes;
 
+if (!class_exists("\PromisedEntities\SrcTest\Doubles\Classes\PromisedEmptyInterface", false)) {
 class PromisedEmptyInterface implements \PromisedEntities\PromisedEntity, \PromisedEntities\SrcTest\Doubles\Classes\EmptyInterface
 {
     /** @var \PromisedEntities\SrcTest\Doubles\Classes\Promise */
@@ -83,6 +86,7 @@ class PromisedEmptyInterface implements \PromisedEntities\PromisedEntity, \Promi
     }
     
 
+}
 }
 EXPECTED;
 
@@ -100,6 +104,7 @@ EXPECTED;
         $expectedClassCode = <<<EXPECTED
 namespace PromisedEntities\SrcTest\Doubles\Classes;
 
+if (!class_exists("\PromisedEntities\SrcTest\Doubles\Classes\PromisedClassWithMethods", false)) {
 class PromisedClassWithMethods extends \PromisedEntities\SrcTest\Doubles\Classes\ClassWithMethods implements \PromisedEntities\PromisedEntity
 {
     /** @var \PromisedEntities\SrcTest\Doubles\Classes\Promise */
@@ -113,6 +118,7 @@ class PromisedClassWithMethods extends \PromisedEntities\SrcTest\Doubles\Classes
 {method}
 
 {method}
+}
 }
 EXPECTED;
 

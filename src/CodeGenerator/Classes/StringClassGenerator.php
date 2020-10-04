@@ -61,6 +61,7 @@ class StringClassGenerator implements ClassGenerator
         $classCode = <<<CLASS
 namespace $promisedClassNamespace;
 
+if (!class_exists("\\$fullPromisedClassName", false)) {
 class $promisedClassName
 CLASS;
 
@@ -80,6 +81,7 @@ CLASS;
     }
     
 $methodsCode
+}
 }";
 
         return new ClassGeneratorResponse($fullPromisedClassName, $classCode);
