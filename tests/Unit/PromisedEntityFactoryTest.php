@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace PromisedEntities\Test\Unit;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PromisedEntities\CodeGenerator\Classes\ClassGenerator;
 use PromisedEntities\CodeGenerator\Classes\ClassGeneratorResponse;
@@ -29,17 +30,20 @@ class PromisedEntityFactoryTest extends TestCase
     /** @var PromisedEntityFactory */
     private $obj;
 
+    /** @var MockObject|ClassGenerator */
+    private $classGenerator;
+
     protected function setUp(): void
     {
-        $classGenerator = $this->createMock(ClassGenerator::class);
-        $classGenerator->method('generate')->willReturn(
+        $this->classGenerator = $this->createMock(ClassGenerator::class);
+        $this->classGenerator->method('generate')->willReturn(
             new ClassGeneratorResponse(
                 self::GENERATED_CLASS_NAME,
-                'class PromiseEntityFactoryTestGeneratedClass {}'
+                'if (!class_exists("\\PromiseEntityFactoryTestGeneratedClass", false)) { class PromiseEntityFactoryTestGeneratedClass {}}'
             )
         );
 
-        $this->obj = new PromisedEntityFactory($classGenerator);
+        $this->obj = new PromisedEntityFactory($this->classGenerator);
     }
 
     public function testOk(): void
@@ -47,6 +51,25 @@ class PromisedEntityFactoryTest extends TestCase
         $instance = $this->obj->build(Student::class, $this->createMock(Promise::class));
 
         $this->assertInstanceOf(self::GENERATED_CLASS_NAME, $instance);
+    }
+
+    public function testUseOfInstanceCache(): void
+    {
+        $this->classGenerator
+            ->expects($this->once())
+            ->method('generate')
+            ->willReturn(
+                new ClassGeneratorResponse(
+                    self::GENERATED_CLASS_NAME,
+                    'if (!class_exists("\\PromiseEntityFactoryTestGeneratedClass", false)) { class PromiseEntityFactoryTestGeneratedClass {}}'
+                )
+            );
+
+        $instance1 = $this->obj->build(Student::class, $this->createMock(Promise::class));
+        $instance2 = $this->obj->build(Student::class, $this->createMock(Promise::class));
+
+        $this->assertInstanceOf(self::GENERATED_CLASS_NAME, $instance1);
+        $this->assertInstanceOf(self::GENERATED_CLASS_NAME, $instance2);
     }
 
     public function testStaticCreation(): void

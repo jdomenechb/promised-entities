@@ -24,9 +24,13 @@ final class PromisedEntityFactory
     /** @var ClassGenerator */
     private $classGenerator;
 
+    /** @var array<string, class-string<PromisedEntity>> */
+    private $builtClasses;
+
     public function __construct(ClassGenerator $classGenerator)
     {
         $this->classGenerator = $classGenerator;
+        $this->builtClasses = [];
     }
 
     /**
@@ -37,15 +41,21 @@ final class PromisedEntityFactory
      */
     public function build(string $className, $promise)
     {
-        $reflection = new \ReflectionClass($className);
-        $reflectionPromise = new \ReflectionClass($promise);
+        if (!isset($this->builtClasses[$className])) {
+            $reflection = new \ReflectionClass($className);
+            $reflectionPromise = new \ReflectionClass($promise);
 
-        $generatedClass = $this->classGenerator->generate($reflection, $reflectionPromise);
+            $generatedClass = $this->classGenerator->generate($reflection, $reflectionPromise);
 
-        /** @var class-string<PromisedEntity> $fullPromisedClassName */
-        $fullPromisedClassName = $generatedClass->fullClassName();
+            /** @var class-string<PromisedEntity> $fullPromisedClassName */
+            $fullPromisedClassName = $generatedClass->fullClassName();
 
-        eval($generatedClass->classCode());
+            eval($generatedClass->classCode());
+
+            $this->builtClasses[$className] = $fullPromisedClassName;
+        } else {
+            $fullPromisedClassName = $this->builtClasses[$className];
+        }
 
         return new $fullPromisedClassName($promise);
     }
