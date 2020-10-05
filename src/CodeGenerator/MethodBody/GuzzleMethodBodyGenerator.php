@@ -17,7 +17,14 @@ class GuzzleMethodBodyGenerator implements MethodBodyGenerator
 {
     public function generate(\ReflectionMethod $method, array $parametersInvocationCode): string
     {
-        $code = 'return $this->promise->wait(true)->' . $method->getName() . '(';
+        $code = '';
+        $returnType = $method->getReturnType();
+
+        if ($returnType === null || $returnType->getName() !== 'void') {
+            $code = 'return ';
+        }
+
+        $code .= '$this->promise->wait(true)->' . $method->getName() . '(';
         $code .= implode(', ', $parametersInvocationCode);
         $code .= ");";
 

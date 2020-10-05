@@ -59,6 +59,13 @@ class Student
         return $this->age;
     }
 
+    public function isHighSchoolerOrFail(): void
+    {
+        if ($this->age <= 12) {
+            throw new \RuntimeException('Not a high schooler');
+        }
+    }
+
     public static function fromData(string $id, string $name, int $age): self
     {
         return new self($id, $name, $age);

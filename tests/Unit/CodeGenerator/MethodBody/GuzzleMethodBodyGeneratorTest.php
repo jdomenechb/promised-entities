@@ -27,6 +27,19 @@ class GuzzleMethodBodyGeneratorTest extends TestCase
         $this->obj = new GuzzleMethodBodyGenerator();
     }
 
+    public function testOkWithVoidMethod(): void
+    {
+        $reflection = new \ReflectionClass(Methods::class);
+        $reflectionMethod = $reflection->getMethod('methodVoid');
+
+        $expected = '$this->promise->wait(true)->methodVoid();';
+        $parametersInvocationCode = [];
+
+        $result = $this->obj->generate($reflectionMethod, $parametersInvocationCode);
+
+        $this->assertSame($expected, $result);
+    }
+
     public function testOkWithParameters(): void
     {
         $reflection = new \ReflectionClass(Methods::class);
