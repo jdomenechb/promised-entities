@@ -29,7 +29,7 @@ class StringTypeGeneratorTest extends TestCase
 
     public function testNoType(): void
     {
-        $output = $this->obj->generate(null);
+        $output = $this->obj->generate(null, null);
 
         $this->assertSame('', $output);
     }
@@ -39,7 +39,7 @@ class StringTypeGeneratorTest extends TestCase
         $reflection = new \ReflectionClass(Types::class);
         $reflectionMethod = $reflection->getMethod('simpleType');
 
-        $output = $this->obj->generate($reflectionMethod->getReturnType());
+        $output = $this->obj->generate($reflectionMethod->getReturnType(), null);
 
         $this->assertSame('int', $output);
     }
@@ -49,7 +49,7 @@ class StringTypeGeneratorTest extends TestCase
         $reflection = new \ReflectionClass(Types::class);
         $reflectionMethod = $reflection->getMethod('simpleNullableType');
 
-        $output = $this->obj->generate($reflectionMethod->getReturnType());
+        $output = $this->obj->generate($reflectionMethod->getReturnType(), null);
 
         $this->assertSame('?int', $output);
     }
@@ -59,7 +59,7 @@ class StringTypeGeneratorTest extends TestCase
         $reflection = new \ReflectionClass(Types::class);
         $reflectionMethod = $reflection->getMethod('selfType');
 
-        $output = $this->obj->generate($reflectionMethod->getReturnType());
+        $output = $this->obj->generate($reflectionMethod->getReturnType(), null);
 
         $this->assertSame('self', $output);
     }
@@ -69,7 +69,7 @@ class StringTypeGeneratorTest extends TestCase
         $reflection = new \ReflectionClass(Types::class);
         $reflectionMethod = $reflection->getMethod('selfNullableType');
 
-        $output = $this->obj->generate($reflectionMethod->getReturnType());
+        $output = $this->obj->generate($reflectionMethod->getReturnType(), null);
 
         $this->assertSame('?self', $output);
     }
@@ -79,7 +79,7 @@ class StringTypeGeneratorTest extends TestCase
         $reflection = new \ReflectionClass(Types::class);
         $reflectionMethod = $reflection->getMethod('complexType');
 
-        $output = $this->obj->generate($reflectionMethod->getReturnType());
+        $output = $this->obj->generate($reflectionMethod->getReturnType(), null);
 
         $this->assertSame('\\' . Types::class, $output);
     }
@@ -89,8 +89,18 @@ class StringTypeGeneratorTest extends TestCase
         $reflection = new \ReflectionClass(Types::class);
         $reflectionMethod = $reflection->getMethod('complexNullableType');
 
-        $output = $this->obj->generate($reflectionMethod->getReturnType());
+        $output = $this->obj->generate($reflectionMethod->getReturnType(), null);
 
         $this->assertSame('?\\' . Types::class, $output);
+    }
+
+    public function testReplacingSelfByReferenceClass(): void
+    {
+        $reflection = new \ReflectionClass(Types::class);
+        $reflectionMethod = $reflection->getMethod('selfType');
+
+        $output = $this->obj->generate($reflectionMethod->getReturnType(), $reflectionMethod);
+
+        $this->assertSame('\\' . Types::class, $output);
     }
 }

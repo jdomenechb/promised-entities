@@ -15,16 +15,21 @@ namespace PromisedEntities\CodeGenerator\Type;
 
 class StringTypeGenerator implements TypeGenerator
 {
-    public function generate(?\ReflectionType $type): string
+    public function generate(?\ReflectionType $type, ?\ReflectionMethod $referenceMethod): string
     {
         $typeCode = '';
 
         if ($type) {
             $name = $type->getName();
 
-            $typeCode = ($type->allowsNull() ? '?' : '')
-                . (!$type->isBuiltin() && $name !== 'self' ? '\\' : '')
+            $typeCode = ($type->allowsNull() ? '?' : '');
+
+            if ($name === 'self' && $referenceMethod !== null) {
+                $typeCode .= '\\' . $referenceMethod->getDeclaringClass()->getName();
+            } else {
+                $typeCode .= (!$type->isBuiltin() && $name !== 'self' ? '\\' : '')
                 . $name;
+            }
         }
 
         return $typeCode;

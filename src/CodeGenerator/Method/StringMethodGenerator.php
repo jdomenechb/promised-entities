@@ -36,7 +36,7 @@ class StringMethodGenerator implements MethodGenerator
         $parametersInvocationCode = [];
 
         foreach ($method->getParameters() as $parameter) {
-            $typeCode = $this->typeGenerator->generate($parameter->getType());
+            $typeCode = $this->typeGenerator->generate($parameter->getType(), $method);
             $typeCode = $typeCode ? $typeCode . ' ' : '';
 
             $parametersCode[] = $typeCode . '$' . $parameter->getName();
@@ -48,7 +48,7 @@ class StringMethodGenerator implements MethodGenerator
         $methodCode .= ")";
 
         if ($method->hasReturnType()) {
-            $methodCode .= ': ' . $this->typeGenerator->generate($method->getReturnType());
+            $methodCode .= ': ' . $this->typeGenerator->generate($method->getReturnType(), $method);
         }
 
         $methodCode .= "\n{\n";

@@ -15,5 +15,5 @@ namespace PromisedEntities\CodeGenerator\Type;
 
 interface TypeGenerator
 {
-    public function generate(?\ReflectionType $type): string;
+    public function generate(?\ReflectionType $type, ?\ReflectionMethod $referenceMethod): string;
 }

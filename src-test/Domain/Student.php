@@ -66,6 +66,13 @@ class Student
         }
     }
 
+    public function setAge(int $age): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
     public static function fromData(string $id, string $name, int $age): self
     {
         return new self($id, $name, $age);

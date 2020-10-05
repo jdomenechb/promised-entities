@@ -26,6 +26,13 @@ class IntegrationTest extends TestCase
         $this->assertSame('1', $student->id());
         $this->assertSame('John Smith', $student->name());
         $this->assertSame(13, $student->age());
+        $student->isHighSchoolerOrFail();
+
+        $student->setAge(12);
+        $this->assertSame(12, $student->age());
+
+        $this->expectException(\RuntimeException::class);
+        $student->isHighSchoolerOrFail();
     }
 
     public function testBuildingSameClassTwice(): void
