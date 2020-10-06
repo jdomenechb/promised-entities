@@ -18,7 +18,7 @@
         "guzzlehttp/promises": "^1",
         "symplify/easy-coding-standard-prefixed": "^8.3",
         "vimeo/psalm": "^3.16",
-        "guzzlehttp/guzzle": "^7.1"
+        "guzzlehttp/guzzle": "^6.5"
     },
     "autoload": {
         "psr-4": {
