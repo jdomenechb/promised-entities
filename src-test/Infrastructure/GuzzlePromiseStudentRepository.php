@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace PromisedEntities\SrcTest\Infrastructure;
 
-use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use PromisedEntities\CodeGenerator\MethodBody\GuzzleMethodBodyGenerator;
 use PromisedEntities\PromisedEntityFactory;
 use PromisedEntities\SrcTest\Domain\Student;
 use PromisedEntities\SrcTest\Domain\StudentRepository;
+use Psr\Http\Message\ResponseInterface;
 
 class GuzzlePromiseStudentRepository implements StudentRepository
 {
@@ -26,24 +30,30 @@ class GuzzlePromiseStudentRepository implements StudentRepository
      */
     private $promisedEntityFactory;
 
-    public function __construct()
+    /** @var Client */
+    private $client;
+
+    public function __construct(MockHandler $mockHandler)
     {
         $this->promisedEntityFactory = PromisedEntityFactory::create(new GuzzleMethodBodyGenerator());
+
+        $handlerStack = HandlerStack::create($mockHandler);
+        $this->client = new Client(['handler' => $handlerStack]);
     }
 
     public function byId(string $id): ?Student
     {
-        $promise = new Promise(function () use (&$promise, $id): void {
-            switch ($id) {
-                case '1':
-                    $promise->resolve(Student::fromData('1', 'John Smith', 13));
-                    break;
+        $promise = $this->client->getAsync(sprintf('/student/%s', $id));
+        $promise = $promise->then(
+            static function (ResponseInterface $response) {
+                $responseBody = json_decode($response->getBody()->getContents(), true);
 
-                case '2':
-                    $promise->resolve(Student::fromData('2', 'Jane Doe', 14));
-                    break;
+                return Student::fromData($responseBody['id'], $responseBody['name'], $responseBody['age']);
+            },
+            static function (GuzzleException $e): void {
+                throw $e;
             }
-        });
+        );
 
         /** @var Student $toReturn */
         return $this->promisedEntityFactory->build(Student::class, $promise);

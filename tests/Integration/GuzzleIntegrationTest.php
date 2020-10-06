@@ -13,14 +13,20 @@ declare(strict_types=1);
 
 namespace PromisedEntities\Test\Integration;
 
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use PromisedEntities\SrcTest\Infrastructure\GuzzlePromiseStudentRepository;
 
-class IntegrationTest extends TestCase
+class GuzzleIntegrationTest extends TestCase
 {
     public function testSimpleUse(): void
     {
-        $repository = new GuzzlePromiseStudentRepository();
+        $mockHandler = new MockHandler([
+            new Response(200, [], json_encode(['id' => '1', 'name' => 'John Smith', 'age' => 13])),
+        ]);
+
+        $repository = new GuzzlePromiseStudentRepository($mockHandler);
         $student = $repository->byId('1');
 
         $this->assertSame('1', $student->id());
@@ -37,7 +43,12 @@ class IntegrationTest extends TestCase
 
     public function testBuildingSameClassTwice(): void
     {
-        $repository = new GuzzlePromiseStudentRepository();
+        $mockHandler = new MockHandler([
+            new Response(200, [], json_encode(['id' => '1', 'name' => 'John Smith', 'age' => 13])),
+            new Response(200, [], json_encode(['id' => '2', 'name' => 'Jane Doe', 'age' => 14])),
+        ]);
+
+        $repository = new GuzzlePromiseStudentRepository($mockHandler);
         $student1 = $repository->byId('1');
         $student2 = $repository->byId('2');
 
